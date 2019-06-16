@@ -13,8 +13,9 @@ module Options.Flags
   , flag
   , enabled
   , disabled
-  , setFlag
-  , unsetFlag
+  , set
+  , unset
+  , toggle
   ) where
 
 import qualified Data.Bits as B
@@ -74,7 +75,7 @@ instance IsFlag a => Monoid (Flags a) where
   mempty = Flags $ V.replicate (size (proxy# :: Proxy# a)) 0
 
 flag :: IsFlag a => a -> Flags a
-flag = flip setFlag mempty
+flag = flip set mempty
 
 enabled :: IsFlag a => a -> Flags a -> Bool
 enabled a (Flags fs) = B.testBit (V.unsafeIndex fs vi) bi
@@ -83,14 +84,14 @@ enabled a (Flags fs) = B.testBit (V.unsafeIndex fs vi) bi
 disabled :: IsFlag a => a -> Flags a -> Bool
 disabled a fs = not (enabled a fs)
 
-setFlag :: IsFlag a => a -> Flags a -> Flags a
-setFlag a (Flags fs) = Flags $ V.imap (\i f -> if i == vi then B.setBit f bi else f) fs
+set :: IsFlag a => a -> Flags a -> Flags a
+set a (Flags fs) = Flags $ V.imap (\i f -> if i == vi then B.setBit f bi else f) fs
   where (vi,bi) = index a
 
-unsetFlag :: IsFlag a => a -> Flags a -> Flags a
-unsetFlag a (Flags fs) = Flags $ V.imap (\i f -> if i == vi then B.clearBit f bi else f) fs
+unset :: IsFlag a => a -> Flags a -> Flags a
+unset a (Flags fs) = Flags $ V.imap (\i f -> if i == vi then B.clearBit f bi else f) fs
   where (vi,bi) = index a
 
-toggleFlag :: IsFlag a => a -> Flags a -> Flags a
-toggleFlag a (Flags fs) = Flags $ V.imap (\i f -> if i == vi then B.complementBit f bi else f) fs
+toggle :: IsFlag a => a -> Flags a -> Flags a
+toggle a (Flags fs) = Flags $ V.imap (\i f -> if i == vi then B.complementBit f bi else f) fs
   where (vi,bi) = index a
