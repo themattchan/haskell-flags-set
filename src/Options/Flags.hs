@@ -41,6 +41,7 @@ instance (Show a, IsFlag a) => Show (Flags a) where
 instance IsFlag a => IsList (Flags a) where
   type Item (Flags a) = a
 
+  -- FIXME: this is buggy
   fromList = Flags . V.unfoldr go . (0,) . sort
     where
       siz = size (proxy# :: Proxy# a)
