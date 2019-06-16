@@ -1,3 +1,3 @@
-# haskell-flags-set
+# flags-set
 
 Efficient representation of program flags
