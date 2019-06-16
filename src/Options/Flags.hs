@@ -32,8 +32,8 @@ size :: forall a. IsFlag a => Proxy# a -> Int
 size _ = fromEnum (maxBound @a) `quot` 64 + 1
 
 -- (elem in vector, bit index)
-toIndex :: IsFlag a => a -> (Int, Int)
-toIndex a = quotRem (fromEnum a) 64
+index :: IsFlag a => a -> (Int, Int)
+index a = quotRem (fromEnum a) 64
 
 instance (Show a, IsFlag a) => Show (Flags a) where
   show = show . toList
@@ -54,7 +54,7 @@ instance IsFlag a => IsList (Flags a) where
          | vi > v = Just (b, (vi, f:fs))
          | otherwise = fill (v, B.setBit b bi) fs
         where
-          (vi, bi) = toIndex f
+          (vi, bi) = index f
 
   toList (Flags fs) = V.ifoldr go [] fs
     where
@@ -77,19 +77,19 @@ flag = flip setFlag mempty
 
 enabled :: IsFlag a => a -> Flags a -> Bool
 enabled a (Flags fs) = B.testBit (V.unsafeIndex fs vi) bi
-  where (vi,bi) = toIndex a
+  where (vi,bi) = index a
 
 disabled :: IsFlag a => a -> Flags a -> Bool
 disabled a fs = not (enabled a fs)
 
 setFlag :: IsFlag a => a -> Flags a -> Flags a
 setFlag a (Flags fs) = Flags $ V.imap (\i f -> if i == vi then B.setBit f bi else f) fs
-  where (vi,bi) = toIndex a
+  where (vi,bi) = index a
 
 unsetFlag :: IsFlag a => a -> Flags a -> Flags a
 unsetFlag a (Flags fs) = Flags $ V.imap (\i f -> if i == vi then B.clearBit f bi else f) fs
-  where (vi,bi) = toIndex a
+  where (vi,bi) = index a
 
 toggleFlag :: IsFlag a => a -> Flags a -> Flags a
 toggleFlag a (Flags fs) = Flags $ V.imap (\i f -> if i == vi then B.complementBit f bi else f) fs
-  where (vi,bi) = toIndex a
+  where (vi,bi) = index a
