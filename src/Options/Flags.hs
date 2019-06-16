@@ -22,7 +22,7 @@ import qualified Data.Bits as B
 import Data.List (sort)
 import qualified Data.Vector.Unboxed as V
 import Data.Word (Word64)
-import GHC.Exts
+import GHC.Exts (IsList(..))
 import GHC.Prim (Proxy#, proxy#)
 
 newtype Flags a = Flags (V.Vector Word64) deriving Eq
