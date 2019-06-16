@@ -41,14 +41,17 @@ instance (Show a, IsFlag a) => Show (Flags a) where
 instance IsFlag a => IsList (Flags a) where
   type Item (Flags a) = a
 
-  fromList = Flags . V.unfoldr go . Just . (0,) . sort
+  fromList = Flags . V.unfoldr go . (0,) . sort
     where
-      go Nothing         = Nothing
-      go (Just (vi, fs)) = fill (vi, 0) fs
+      siz = size (proxy# :: Proxy# a)
 
-      fill (v, !b)  [] = Just (b, Nothing)
-      fill (v, !b) (f:fs)
-         | vi > v = Just (b, Just (vi, f:fs))
+      go (!vi, []) | vi < siz = Just (0, (vi+1, []))
+                   | otherwise = Nothing
+      go (!vi, fs) = fill (vi, 0) fs
+
+      fill (!v, !b)  [] = Just (b, (v, []))
+      fill (!v, !b) (f:fs)
+         | vi > v = Just (b, (vi, f:fs))
          | otherwise = fill (v, B.setBit b bi) fs
         where
           (vi, bi) = toIndex f
