@@ -39,7 +39,7 @@ let
             in
                 allPkgs //
                 {
-                  haskell-flags-set = pkgs.haskell.lib.doCheck (haskellPackagesNew.callPackage ./haskell-flags-set.nix { });
+                  flags-set = pkgs.haskell.lib.doCheck (haskellPackagesNew.callPackage ./flags-set.nix { });
                 }
            )
         ];
@@ -52,4 +52,4 @@ let
   pkgs = import nixpkgs { inherit config overlays; };
 
 in
-  { inherit (pkgs.haskellPackages) haskell-flags-set cabal cabal-install; }
+  { inherit (pkgs.haskellPackages) flags-set cabal cabal-install; }

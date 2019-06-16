@@ -1,6 +1,6 @@
 { mkDerivation, base, ghc-prim, stdenv, vector }:
 mkDerivation {
-  pname = "haskell-flags-set";
+  pname = "flags-set";
   version = "0.1.0.0";
   src = ./.;
   libraryHaskellDepends = [ base ghc-prim vector ];

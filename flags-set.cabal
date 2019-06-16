@@ -2,7 +2,7 @@
 --  http://haskell.org/cabal/users-guide/
 
 -- The name of the package.
-name:                haskell-flags-set
+name:                flags-set
 
 -- The package version.  See the Haskell package versioning policy (PVP)
 -- for standards guiding when and how versions should be incremented.

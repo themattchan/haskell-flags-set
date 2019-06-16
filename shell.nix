@@ -4,7 +4,7 @@ let
 in
   pkgs.stdenv.mkDerivation {
     name = "shell";
-    buildInputs = proj.haskell-flags-set.env.nativeBuildInputs ++
+    buildInputs = proj.flags-set.env.nativeBuildInputs ++
                   [
 #                    proj.cabal
                     proj.cabal-install
